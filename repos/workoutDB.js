@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const workout_category = require('./entity/categorymodel');
+const workout_category = require('../entity/categorymodel');
 
 
 mongoose.connect('mongodb://localhost/workouttracker');
@@ -7,14 +7,12 @@ mongoose.connect('mongodb://localhost/workouttracker');
 
 //Select all Cetogries
 function fetchCategory(callback){
-var query = workout_category.find({}).select('category_name -_id')
+var query = workout_category.find({})
 query.exec((err,doc)=>{
     if(err) throw err;
     callback(err,doc);
 })
 }
-
-//var category = {"category_name":"jogging"}
 
 //Add Category
 function addCategory(category,callback){
@@ -34,7 +32,4 @@ function deleteCategory(category,callback){
     callback(err,usr_message);
 })
 }
-//addCategory(category,(err,res)=>{console.log(res.message)})
-//fetchCategory((err,res)=>{console.log(res)})
-//deleteCategory(category,(err,res)=>{console.log(res.message)})
 module.exports = {fetchCategory,addCategory,deleteCategory}

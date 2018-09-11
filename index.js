@@ -2,15 +2,16 @@ const express = require('express');
 const app = express();
 const cors = require('cors')
 const bodyParser = require('body-parser');
-const workout = require('./workoutDB')
+const workout = require('./repos/workoutDB')
 
 app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false })); // for parsing application/x-www-form-urlencoded
+
 app.use(cors());
 
 app.get('/',(req,res)=>{
     workout.fetchCategory((err,docs)=>{
-        res.send(docs)
+        res.json(docs)
     })
 });
 
