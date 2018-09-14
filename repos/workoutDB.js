@@ -19,7 +19,7 @@ function addCategory(category,callback){
 var wc = new workout_category(category);
 var usr_message = {"message": category.category_name + " added to your workout"}
 wc.save((err,doc)=>{
-    if(err) throw err;
+    //if(err) throw err;
     callback(err,usr_message);
 })
 }
