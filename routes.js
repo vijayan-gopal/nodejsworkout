@@ -3,16 +3,25 @@ const workout = require('./repos/workoutDB')
 const routes = (app)=>{
     app.get('/',(req,res)=>{
         workout.fetchCategory((err,docs)=>{
-            res.json(docs)
+         if(err)
+         {
+          var usr_message = {"message": "Network problem in loading your workout, try after sometime"}
+          res.status(501).send(usr_message)
+         }
+         else
+         {
+          res.status(200).send(docs)
+         }
         })
     });
 
-    app.post('/add',(req,res,next)=>{
+    app.post('/add',(req,res)=>{
         var category = req.body
+        console.log(category)
         workout.addCategory(category,(err,docs)=>{
             if(err)
             {
-             next(err)
+             res.status(300).send(docs)
             }
             else
             {
@@ -26,11 +35,11 @@ const routes = (app)=>{
         workout.deleteCategory(category,(err,docs)=>{
             if(err)
             {
-             next(err)
+              res.status(501).send(docs)
             }
             else
             {
-             res.status(200).send(docs)
+              res.status(200).send(docs)
             }
         })
     });
