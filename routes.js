@@ -17,7 +17,6 @@ const routes = (app)=>{
 
     app.post('/add',(req,res)=>{
         var category = req.body
-        console.log(category)
         workout.addCategory(category,(err,docs)=>{
             if(err)
             {

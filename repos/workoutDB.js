@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const workout_category = require('../entity/categorymodel');
+const workout_category = require('../entity/workoutCategoryModel');
 
 mongoose.connect('mongodb://localhost/workouttracker')
 
