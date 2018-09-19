@@ -1,7 +1,7 @@
 const workout = require('./repos/workoutDB')
 
 const routes = (app)=>{
-    app.get('/',(req,res)=>{
+    app.get('/fetchcategory',(req,res)=>{
         workout.fetchCategory((err,docs)=>{
          if(err)
          {
@@ -15,7 +15,7 @@ const routes = (app)=>{
         })
     });
 
-    app.post('/add',(req,res)=>{
+    app.post('/addcategory',(req,res)=>{
         var category = req.body
         workout.addCategory(category,(err,docs)=>{
             if(err)
@@ -29,7 +29,7 @@ const routes = (app)=>{
         })
     });
 
-    app.post('/delete',(req,res)=>{
+    app.post('/deletecategory',(req,res)=>{
         var category = req.body
         workout.deleteCategory(category,(err,docs)=>{
             if(err)
@@ -42,5 +42,62 @@ const routes = (app)=>{
             }
         })
     });
+
+    app.post('/addworkout',(req,res)=>{
+        var addWorkoutDoc = req.body
+        workout.addWorkout(addWorkoutDoc,(err,docs)=>{
+            if(err)
+            {
+             res.status(300).send(err)
+            }
+            else
+            {
+             res.status(200).send(docs)
+            }
+        })
+    });
+
+    app.put('/updateworkout',(req,res)=>{
+        var updateWorkoutDoc = req.body
+        workout.updateWorkout(updateWorkoutDoc,(err,docs)=>{
+            if(err)
+            {
+             res.status(300).send(err)
+            }
+            else
+            {
+             res.status(200).send(docs)
+            }
+        })
+    });
+
+    app.post('/startworkout',(req,res)=>{
+        var startWorkoutDoc = req.body
+        workout.startWorkoutActive(startWorkoutDoc,(err,docs)=>{
+            if(err)
+            {
+             res.status(300).send(err)
+            }
+            else
+            {
+             res.status(200).send(docs)
+            }
+        })
+    });
+
+    app.put('/endworkout',(req,res)=>{
+        var endWorkoutDoc = req.body
+        workout.endWorkoutActive(endWorkoutDoc,(err,docs)=>{
+            if(err)
+            {
+             res.status(300).send(err)
+            }
+            else
+            {
+             res.status(200).send(docs)
+            }
+        })
+    });
+
 }
 module.exports = routes
