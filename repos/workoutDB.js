@@ -103,14 +103,6 @@ function updateWorkout(workoutDoc,callback){
         })
     })
 };
-//Remove below commented lines for production
-//var workoutDoc = {"workout_title":"test run2","workout_note":"test note","calories_burn_per_min":"0.1","category_id": "","category_name":"running"}
-//var workoutDoc = {"old_workout_title":"test update","workout_title":"test update1","workout_note":"test note update","category_id": "","category_name":"walking"}
-//updateWorkout(workoutDoc)
-//addWorkout(workoutDoc);
-//var query = workout_collection.findOne({"workout_title":"test run"})
-//            .populate('category_id')
-//query.exec((err,doc)=>{console.log(doc.category_id)})
 
 function startWorkoutActive(workoutActiveDoc,callback){
     workout_collection.findOne({"workout_title":workoutActiveDoc.workout_title},(err,doc)=>{
@@ -152,15 +144,54 @@ function endWorkoutActive(workoutActiveDoc,callback){
         })
     })
 };
-//Remove below commented lines for production
-//var workoutActiveDoc = {"workout_id":"","start_time":"11:10:00","start_date":"09/17/2018","end_date":"","end_time":"","comment":"test","status":"true","workout_title":"test run"}
-//var workoutActiveDoc = {"end_date":"09/18/2018","end_time":"19:00:00","comment":"test end","status":"true","workout_title":"test run"}
-//startWorkoutActive(workoutActiveDoc)
-//endWorkoutActive(workoutActiveDoc)
-//var query = workout_active.find({})
-//var query = workout_collection.findOne({"workout_title":"test run"})
-//            .populate('category_id')
-//query.exec((err,doc)=>{console.log(doc)})
 
-//pending: update workout_acive table to end the workout
-module.exports = {fetchCategory,addCategory,deleteCategory,dbHandler,addWorkout,updateWorkout,startWorkoutActive,endWorkoutActive}
+function viewAllWorkout(callback){
+    workout_collection.find({},(err,res)=>{
+        callback(err,res)
+    })
+};
+
+//Pending
+workout_active.aggregate(
+[
+    {
+        $project:
+        {
+            _id:1,
+            workout_id:1,
+            start_date:{$dateFromParts:{'year':{$convert:{input:{$substr:["$start_date",6,4]},to:"int"}},
+                                     'month':{$convert:{input:{$substr:["$start_date",0,2]},to:"int"}},
+                                     'day':{$convert:{input:{$substr:["$start_date",3,2]},to:"int"}},
+                                     'hour':{$convert:{input:{$substr:["$start_time",0,2]},to:"int"}},
+                                     'minute':{$convert:{input:{$substr:["$start_time",3,2]},to:"int"}},
+                                     'second':{$convert:{input:{$substr:["$start_time",6,4]},to:"int"}}}
+                                    },
+            end_date:{$dateFromParts:{'year':{$convert:{input:{$substr:["$end_date",6,4]},to:"int"}},
+                                      'month':{$convert:{input:{$substr:["$end_date",0,2]},to:"int"}},
+                                      'day':{$convert:{input:{$substr:["$end_date",3,2]},to:"int"}},
+                                      'hour':{$convert:{input:{$substr:["$end_time",0,2]},to:"int"}},
+                                      'minute':{$convert:{input:{$substr:["$end_time",3,2]},to:"int"}},
+                                      'second':{$convert:{input:{$substr:["$end_time",6,4]},to:"int"}}}
+           },
+           status:1
+        }
+    },
+    {
+        $lookup:
+        {
+            from:"workout",
+            localField:'workout_id',
+            foreignField:'_id',
+            as:'lookupDoc'
+        }
+    }
+
+]
+).exec((err,res)=>{
+    if(err)
+    {console.log(err)}
+    else
+    {console.log(res)}})
+
+
+module.exports = {fetchCategory,addCategory,deleteCategory,dbHandler,addWorkout,updateWorkout,startWorkoutActive,endWorkoutActive,viewAllWorkout}

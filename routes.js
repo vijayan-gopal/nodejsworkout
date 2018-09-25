@@ -98,6 +98,18 @@ const routes = (app)=>{
             }
         })
     });
-
+    app.get('/viewallworkout',(req,res)=>{
+        workout.viewAllWorkout((err,docs)=>{
+         if(err)
+         {
+          var usr_message = {"message": "Network problem in loading your workout, try after sometime"}
+          res.status(501).send(usr_message)
+         }
+         else
+         {
+          res.status(200).send(docs)
+         }
+        })
+    });
 }
 module.exports = routes

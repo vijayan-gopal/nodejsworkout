@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
+const ObjectId = Schema.Types.ObjectId;
  
 const activeschema = new Schema({
-  workout_id: {type: ObjectId},
+  workout_id: {type: ObjectId,ref:'workout_collection'},
   start_time: {type: String},
   start_date: {type: String},
   end_date: {type: String},
   end_time: {type: String},
-  comment: {type: String,max: 64},
+  comment: {type: String},
   status: {type:Boolean}
 
   
