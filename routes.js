@@ -45,7 +45,7 @@ const routes = (app)=>{
 
     app.post('/addworkout',(req,res)=>{
         var addWorkoutDoc = req.body
-        workout.addWorkout(addWorkoutDoc,(err,docs)=>{
+        workout.addWorkout(addWorkoutDoc.workoutDoc,(err,docs)=>{
             if(err)
             {
              res.status(300).send(err)
